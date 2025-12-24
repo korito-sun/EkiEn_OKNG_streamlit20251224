@@ -21,3 +21,7 @@ image.png
 
 CSVデータはFCT1～5を統合して前処理が必要
 20251229A86_Trace_log.csvとしマージする必要があります。
+
+##　新しくEKIEN_OKNG_stremlitフォルダでVScode仮想環境構築
+-python -m venv venv と .\venv\Scripts\activate をしpip install streamlit,matplotlib,pandas
+
