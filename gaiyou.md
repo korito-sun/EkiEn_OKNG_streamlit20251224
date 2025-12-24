@@ -3,18 +3,18 @@
 
 image.png
 ![image info](./img/image.png)
-###　表示内容は下記
-・総合OK/NG比率とトータル生産数の円グラフ
-・NG内容のパレート図（FCT毎の積み上げ）
-・日別 不良数・不良率推移
-・機種：Model 毎のOK/NG比率の円グラフ
-・FCT毎のOK/NG比率の円グラフ
+### 表示内容は下記
+- 総合OK/NG比率とトータル生産数の円グラフ
+- NG内容のパレート図（FCT毎の積み上げ）
+- 日別 不良数・不良率推移
+- 機種：Model 毎のOK/NG比率の円グラフ
+- FCT毎のOK/NG比率の円グラフ
 を表示し、
 
 左のサイドバーでピボット切り替え表示
-・期間：全期間/月間
-・FCTの表示選択ラジオボタン
-###　使用CSVデータは
+- 期間：全期間/月間
+- FCTの表示選択ラジオボタン
+### 使用CSVデータは
 　添付　**Trace_log_FCT4.csv**　の形式参照
 
 一応AG６（QRコードあり）でも適用可能　なようにしています。
@@ -22,6 +22,6 @@ image.png
 CSVデータはFCT1～5を統合して前処理が必要
 20251229A86_Trace_log.csvとしマージする必要があります。
 
-##　新しくEKIEN_OKNG_stremlitフォルダでVScode仮想環境構築
--python -m venv venv と .\venv\Scripts\activate をしpip install streamlit,matplotlib,pandas
+## 新しくEKIEN_OKNG_stremlitフォルダでVScode仮想環境構築
+- python -m venv venv と .\venv\Scripts\activate をしpip install streamlit,matplotlib,pandas
 
