@@ -12,24 +12,10 @@
 # 2025-12-25 改訂版 NG理由の詳細表を追加
 # パレート図の下に、NG理由の詳細な統計テーブルを追加しました。
 # NG詳細表のカラムを特定項目（DateTime, PCB_Name等）に指定し、横長に表示します。
-
-# -*- coding: utf-8 -*-
-# Streamlitアプリケーション: Trace Log Analysis Dashboard (Column Reorder Edition)
-# NG詳細表の順序を指定: 'TestNo.', 'ErrorNo.', 'DateTime', 'PCB_Name', 'Model', 'FCT_ID'
-
-# -*- coding: utf-8 -*-
-# Streamlitアプリケーション: Trace Log Analysis Dashboard (Final Layout Edition)
-# 修正内容: 
 # 1. col1(円グラフ)とcol2(パレート図)の下に、NG詳細履歴一覧表を追加配置。
 # 2. 表の項目は TestNo., ErrorNo., DateTime, PCB_Name, Model, FCT_ID の順。
 # 3. データ読み込み時に PCB_Name カラムもクリーニング対象に追加。
-
-# -*- coding: utf-8 -*-
-# Streamlitアプリケーション: Trace Log Analysis Dashboard (Combined Column Edition)
 # 修正内容: NG詳細履歴表の 'TestNo.' と 'ErrorNo.' を結合し、'TestErrorNo' として表示。
-
-# -*- coding: utf-8 -*-
-# Streamlitアプリケーション: Trace Log Analysis Dashboard (Final Layout Edition - Future Compat)
 # 修正内容: 
 # Deprecation Warning対応: st.dataframeの use_container_width=True を width='stretch' に変更しました。
 
