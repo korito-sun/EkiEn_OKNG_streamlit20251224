@@ -25,6 +25,11 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 import numpy as np
 import os
+import matplotlib
+
+# 日本語フォント設定　#2026-01-10 修正
+matplotlib.rcParams['font.sans-serif'] = ['MS Gothic', 'Yu Gothic', 'Hiragino Sans', 'DejaVu Sans']
+matplotlib.rcParams['axes.unicode_minus'] = False
 
 # ページ設定
 st.set_page_config(page_title="Trace Log Analysis", layout="wide")
@@ -154,8 +159,10 @@ def plot_daily_trend_with_rate(data, title='Daily NG Trend & Defect Rate'):
     cud_palette = ['#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', '#D55E00', '#CC79A7']
     pivot_df.plot(kind='bar', stacked=True, ax=ax1, color=cud_palette, edgecolor='white', width=0.8)
     ax1.set_title(title, fontsize=16)
+    ax1.set_ylabel('不良数 (件)') #2026-01-10 修正
     ax2 = ax1.twinx()
     ax2.plot(np.arange(len(unique_dates)), daily_rate.values, color='black', marker='o', linewidth=2)
+    ax2.set_ylabel('不良率 (%)') #2026-01-10 修正
     ax2.set_ylim(bottom=0)
     plt.setp(ax1.get_xticklabels(), rotation=45, ha='right')
     plt.tight_layout()
