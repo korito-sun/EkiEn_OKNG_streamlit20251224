@@ -34,7 +34,8 @@ st.title("液晶演出生産時検査機OK/NGダッシュボード")
 
 # CSVファイル設定
 CSV_DIR = './CSV'
-CSV_FILENAME = 'Trace_log_FCT4.csv'
+# CSV_FILENAME = 'Trace_log_FCT4.csv'
+CSV_FILENAME = '20251201A84_Trace_log.csv'
 FILE_PATH = os.path.join(CSV_DIR, CSV_FILENAME)
 
 # データ読み込みとキャッシュ
