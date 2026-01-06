@@ -237,6 +237,20 @@ if df is not None:
     st.info(f"表示対象: {selected_period} / データ件数: {len(df_filtered)} 件")
 
     if len(df_filtered) > 0:
+        
+        # 1. 詳細分析（一番上に移動、タブ順序入れ替え）
+        st.subheader("詳細分析")
+        tab1, tab2 = st.tabs(["FCT_ID別 判定結果", "Model別 判定結果"]) # 左:FCT, 右:Model
+        with tab1:
+            fig1 = plot_grouped_pie_charts(df_filtered, 'FCT_ID')
+            if fig1: st.pyplot(fig1)
+        with tab2:
+            fig2 = plot_grouped_pie_charts(df_filtered, 'Model')
+            if fig2: st.pyplot(fig2)
+        
+        st.markdown("---")
+
+        # 2. 生産品質サマリー
         st.subheader("生産品質サマリー")
         col1, col2 = st.columns([1, 2])
         
@@ -253,11 +267,7 @@ if df is not None:
             else:
                 st.info("この期間・条件でのNGデータはありません。")
         
-        # -------------------------------------------------------------------
-        # 表示順序入れ替え: 日別推移を先に表示
-        # -------------------------------------------------------------------
-        
-        # 1. 日別 不良数・不良率推移 (生産日のみ)
+        # 3. 日別 不良数・不良率推移 (生産日のみ)
         st.markdown("#### 日別 不良数・不良率推移 (生産日のみ)")
         fig_trend = plot_daily_trend_with_rate(df_filtered)
         if fig_trend:
@@ -265,7 +275,7 @@ if df is not None:
         else:
              st.info("日別のデータはありません。")
 
-        # 2. NG詳細履歴一覧 (全FCT合計)
+        # 4. NG詳細履歴一覧 (全FCT合計)
         st.markdown("#### NG詳細履歴一覧 (全FCT合計)")
         ng_only = df_filtered[df_filtered['Final_Status'] == 'NG'].copy()
         
@@ -279,18 +289,6 @@ if df is not None:
             st.dataframe(df_display, width='stretch', hide_index=True)
         else:
             st.info("選択された条件でのNGデータはありません。")
-        
-        # -------------------------------------------------------------------
-
-        st.markdown("---")
-        st.subheader("詳細分析")
-        tab1, tab2 = st.tabs(["Model別 判定結果", "FCT_ID別 判定結果"])
-        with tab1:
-            fig1 = plot_grouped_pie_charts(df_filtered, 'Model')
-            if fig1: st.pyplot(fig1)
-        with tab2:
-            fig2 = plot_grouped_pie_charts(df_filtered, 'FCT_ID')
-            if fig2: st.pyplot(fig2)
     
     else:
         if selected_fcts: st.warning("選択された条件に一致するデータがありません。")
