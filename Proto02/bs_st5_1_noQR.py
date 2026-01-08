@@ -144,6 +144,7 @@ def plot_pareto_chart_fct_stacked(data, title='NG Reasons by FCT (Top 10 + Other
     plt.tight_layout()
     return fig
 
+# 修正箇所: 日別トレンドグラフに検査数量を追加
 def plot_daily_trend_with_rate(data, title='Daily NG Trend & Defect Rate'):
     if 'Date' not in data.columns: return None
     unique_dates = sorted(data['Date'].dropna().unique())
@@ -151,6 +152,7 @@ def plot_daily_trend_with_rate(data, title='Daily NG Trend & Defect Rate'):
     
     ng_data = data[data['Final_Status'] == 'NG'].copy()
     
+    # NGデータの集計
     if len(ng_data) > 0:
         pivot_df = ng_data.pivot_table(index='Date', columns='FCT_ID', aggfunc='size', fill_value=0).reindex(unique_dates, fill_value=0)
     else:
@@ -158,26 +160,45 @@ def plot_daily_trend_with_rate(data, title='Daily NG Trend & Defect Rate'):
         if not all_fcts: return None
         pivot_df = pd.DataFrame(0, index=unique_dates, columns=all_fcts)
 
+    # 検査総数と不良率の計算
     total_counts = data.groupby('Date').size().reindex(unique_dates, fill_value=0)
     daily_rate = (pivot_df.sum(axis=1) / total_counts * 100).fillna(0)
     
-    fig, ax1 = plt.subplots(figsize=(12, 5))
+    fig, ax1 = plt.subplots(figsize=(12, 6))
     cud_palette = ['#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', '#D55E00', '#CC79A7']
     
+    # 棒グラフ描画
     pivot_df.plot(kind='bar', stacked=True, ax=ax1, color=cud_palette, edgecolor='white', width=0.8)
     ax1.set_title(title, fontsize=16)
     ax1.set_ylabel('不良数 (件)')
     
+    # 折れ線グラフ（不良率）描画
     ax2 = ax1.twinx()
-    ax2.plot(np.arange(len(unique_dates)), daily_rate.values, color='black', marker='o', linewidth=2)
+    x_vals = np.arange(len(unique_dates))
+    y_vals = daily_rate.values
+    
+    ax2.plot(x_vals, y_vals, color='black', marker='o', linewidth=2)
     ax2.set_ylabel('不良率 (%)')
-    ax2.set_ylim(bottom=0)
+    
+    # --- ここが修正ポイント: 各点の上に検査総数を表示 ---2024-01-08
+    counts_vals = total_counts.values
+    for i, count in enumerate(counts_vals):
+        ax2.annotate(f'{count}', 
+                     xy=(x_vals[i], y_vals[i]), 
+                     xytext=(0, 8), 
+                     textcoords='offset points',
+                     ha='center', va='bottom', fontsize=10, fontweight='bold', color='#333333')
+    
+    # Y軸の上限を調整（文字が切れないように）
+    if len(y_vals) > 0 and max(y_vals) > 0:
+        ax2.set_ylim(0, max(y_vals) * 1.25)
+    else:
+        ax2.set_ylim(0, 10)
     
     plt.setp(ax1.get_xticklabels(), rotation=45, ha='right')
     plt.tight_layout()
     return fig
 
-# 修正: 複数のグラフを1つのFigureにするのではなく、グリッド状に配置して描画する関数に変更
 def render_grouped_pie_charts_grid(data, category_col, value_col='Final_Status', cols_per_row=4):
     if category_col not in data.columns: return
     unique_cats = sorted(data[category_col].unique())
@@ -250,7 +271,6 @@ if df is not None:
         st.subheader("詳細分析")
         tab1, tab2 = st.tabs(["FCT_ID別 判定結果", "Model別 判定結果"])
         
-        # 修正: 新しい描画関数を使用
         with tab1:
             render_grouped_pie_charts_grid(df_filtered, 'FCT_ID', cols_per_row=3)
         with tab2:
