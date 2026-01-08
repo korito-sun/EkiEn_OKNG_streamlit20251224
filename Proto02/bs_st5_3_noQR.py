@@ -326,22 +326,20 @@ if df is not None:
             existing_cols = [c for c in display_cols if c in ng_only.columns]
             df_display = ng_only[existing_cols].sort_values(by='DateTime', ascending=False)
             
-            # --- 修正: 1行ごとに色を変える（シマウマ模様） ---
-            df_display = df_display.reset_index(drop=True) # インデックスをリセット
+            # --- 交互色 ---
+            df_display = df_display.reset_index(drop=True)
             
             def alternate_color(row):
-                # 薄い青色 (#e6f3ff) を奇数行に適用
                 color = 'background-color: #e6f3ff' if row.name % 2 == 1 else ''
                 return [color] * len(row)
             
             st.markdown(f"NG件数: **{len(df_display)}** 件")
             
-            # pandas Stylerを適用
             st_df = df_display.style.apply(alternate_color, axis=1)
             
-            # use_container_width=True を指定して幅を調整
-            st.dataframe(st_df, hide_index=True, use_container_width=True)
-            # -----------------------------------------------
+            # --- 修正箇所: use_container_width=True を width='stretch' に変更 ---
+            st.dataframe(st_df, hide_index=True, width='stretch') # ←ここを修正しました
+            # -----------------------------------------------------------------
         else:
             st.info("選択された条件でのNGデータはありません。")
     
