@@ -25,3 +25,11 @@ CSVデータはFCT1～5を統合して前処理が必要
 ## 新しくEKIEN_OKNG_stremlitフォルダでVScode仮想環境構築
 - python -m venv venv と .\venv\Scripts\activate をしpip install streamlit,matplotlib,pandas
 
+## 2026-01-08　打合せ変更
+今回の変更内容で見やすくなった認識を持った
+今後以下の点を変更する
+- 検査数（生産数）を折れ線グラフ上に表示
+  - 日別 不良数・不良率推移の検査数が解るように
+- 表示期間をラジオボタン
+  - 年度をプルダウンメニュー
+  - 月をラジオボタンに
