@@ -1,5 +1,7 @@
 # --- 修正ポイント: "nan nan" を "QR_NG" に置換 ---2025-01-08
 # --- 修正: 1行ごとに色を変える（シマウマ模様） ---2025-01-08
+# --- 修正: パレート図の棒グラフの上に合計数を表示 ---2025-01-09修正版
+# --- 修正: st.dataframeの警告対応 (width='stretch') ---2025-01-09
 
 import streamlit as st
 import pandas as pd
@@ -131,12 +133,18 @@ def plot_pareto_chart_fct_stacked(data, title='NG Reasons by FCT (Top 10 + Other
     fig, ax1 = plt.subplots(figsize=(12, 7))
     cud_palette = ['#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', '#D55E00', '#CC79A7']
     
+    # 積み上げ棒グラフ描画
     pivot_df.plot(kind='bar', stacked=True, ax=ax1, color=cud_palette, edgecolor='white', linewidth=0.5)
+    
+    # 合計値の計算と表示
+    total_per_reason = pivot_df.sum(axis=1)
+    for i, v in enumerate(total_per_reason):
+        ax1.text(i, v, str(int(v)), ha='center', va='bottom', fontsize=10, fontweight='bold', color='black')
+
     ax1.set_ylabel('Count')
     ax1.set_title(f'{title}\n(NG Total: {total_ng_count})', fontsize=16)
     ax1.legend(title='FCT_ID', bbox_to_anchor=(1.05, 1), loc='upper left')
     
-    total_per_reason = pivot_df.sum(axis=1)
     cum_perc = (total_per_reason.cumsum() / total_ng_count) * 100
     
     ax2 = ax1.twinx()
@@ -320,13 +328,14 @@ if df is not None:
         
         if not ng_only.empty:
             ng_only['TestErrorNo'] = ng_only['TestNo.'] + ' ' + ng_only['ErrorNo.']
+            # --- 修正: nan nan を QR_NG に ---
             ng_only['TestErrorNo'] = ng_only['TestErrorNo'].replace('nan nan', 'QR_NG')
             
             display_cols = ['TestErrorNo', 'DateTime', 'PCB_Name', 'Model', 'FCT_ID', 'TESTresult']
             existing_cols = [c for c in display_cols if c in ng_only.columns]
             df_display = ng_only[existing_cols].sort_values(by='DateTime', ascending=False)
             
-            # --- 交互色 ---
+            # --- 交互色 (シマウマ模様) ---
             df_display = df_display.reset_index(drop=True)
             
             def alternate_color(row):
@@ -337,9 +346,10 @@ if df is not None:
             
             st_df = df_display.style.apply(alternate_color, axis=1)
             
-            # --- 修正箇所: use_container_width=True を width='stretch' に変更 ---
-            st.dataframe(st_df, hide_index=True, width='stretch') # ←ここを修正しました
-            # -----------------------------------------------------------------
+            # --- Streamlitでの表示 ---
+            # use_container_width=True を width='stretch' に変更
+            st.dataframe(st_df, hide_index=True, width='stretch')
+            
         else:
             st.info("選択された条件でのNGデータはありません。")
     
