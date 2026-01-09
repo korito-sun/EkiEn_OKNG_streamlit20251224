@@ -315,7 +315,7 @@ if df is not None:
              st.info("日別のデータはありません。")
 
         # 4. NG詳細履歴一覧 (全FCT合計)
-        st.markdown("#### NG詳細履歴一覧 (全FCT合計)")
+        st.markdown("#### NG詳細履歴一覧 ")
         ng_only = df_filtered[df_filtered['Final_Status'] == 'NG'].copy()
         
         if not ng_only.empty:
